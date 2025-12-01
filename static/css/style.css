@@ -1,0 +1,6 @@
+body{font-family:Arial,Helvetica,sans-serif;margin:20px;background:#f8f9fa}
+.container{max-width:1100px;margin:0 auto;background:#fff;padding:16px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.controls{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.controls select, .controls input, .controls button{padding:8px}
+.chart-container{height:400px}
+#summary{margin-top:12px}

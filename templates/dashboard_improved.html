@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sales Dashboard - Improved</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- External libs (CDN for demo) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Sales Dashboard (Improved)</h1>
+    <div class="controls">
+      <select id="regions" multiple></select>
+      <select id="products" multiple></select>
+      <input id="date_range" type="text" placeholder="Select date range" />
+      <select id="group_by"><option value="date">Date</option><option value="product">Product</option><option value="region">Region</option></select>
+      <button id="export">Export CSV</button>
+      <label>Auto-refresh <select id="refresh_interval"><option value="0">Off</option><option value="30">30s</option><option value="60">1m</option><option value="300">5m</option></select></label>
+    </div>
+    <div class="chart-container">
+      <canvas id="salesChart"></canvas>
+    </div>
+    <div id="summary"></div>
+  </div>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
