@@ -1,8 +1,15 @@
-# Current version dependencies
+# Production Dependencies for Improved Dashboard
+
+# Core Framework
 Flask==3.0.0
 Werkzeug==3.0.1
 
-# Dependencies to be added in improved version:
-# Flask-Caching==2.1.0    # Data caching
-# Flask-CORS==4.0.0       # CORS support
-# pandas==2.1.0           # Data processing
+# Flask Extensions
+Flask-Caching==2.1.0    # Response caching for performance
+Flask-CORS==4.0.0       # Cross-origin resource sharing
+
+# Data Processing (optional but recommended)
+pandas==2.1.4           # Advanced data processing and analysis
+
+# Utilities
+python-dateutil==2.8.2  # Date parsing and manipulation
