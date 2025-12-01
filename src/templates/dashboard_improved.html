@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard - Improved</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- CDN dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script>
+        // basic page ideas
+        const API_FILTERS = '/api/filters';
+        const API_SALES = '/api/sales';
+        const API_EXPORT = '/api/export';
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Sales Dashboard (Improved)</h1>
+        <div class="controls">
+            <div>
+                <label>Regions</label>
+                <select id="regions" multiple></select>
+            </div>
+            <div>
+                <label>Products</label>
+                <select id="products" multiple></select>
+            </div>
+            <div>
+                <label>Start Date</label>
+                <input id="start_date" />
+            </div>
+            <div>
+                <label>End Date</label>
+                <input id="end_date" />
+            </div>
+            <div>
+                <button id="exportBtn">Export CSV</button>
+            </div>
+        </div>
+        <div class="chart-area">
+            <canvas id="salesChart"></canvas>
+        </div>
+        <div class="summary" id="summary"></div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

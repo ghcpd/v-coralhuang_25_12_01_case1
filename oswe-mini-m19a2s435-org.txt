@@ -1,0 +1,731 @@
+User: # Task: Enhance Sales Dashboard with Interactive Features
+
+Transform the provided static sales dashboard into an **interactive, multi-dimensional analytics platform** with **real-time filtering**, **dynamic charts**, and **AJAX-based updates**.
+
+---
+
+## Goal
+Modernize the dashboard to support multi-region/product comparison, custom date ranges, interactive visualizations, and partial page updates for improved user experience.
+
+---
+
+## Problem Statement
+
+### Current Issues
+1. **Limited Filtering** - Single-select only, fixed time ranges
+2. **Poor Performance** - Full page reload (3-5s) every filter change
+3. **Static Visualization** - Plain tables, no interactive charts
+4. **No Real-time Updates** - Manual refresh only
+5. **Lost Context** - State resets after each query
+
+**User Impact**: Sales managers must make multiple separate queries, manually compare results, wait through repeated page loads. Result: frustration and inefficient decision-making.
+
+---
+
+## Feature: Interactive Dashboard System
+
+### Core Capabilities
+1. **Multi-Dimension Filters** - Select multiple regions/products, custom date ranges, save presets
+2. **Interactive Charts** - Hover tooltips, click drill-down, zoom/pan, export images
+3. **AJAX Partial Refresh** - Update chart only (< 1s), loading animations, preserve state
+4. **Auto-Refresh** - Configurable intervals (30s/1min/5min), pause when inactive
+
+---
+
+## Deliverables
+
+### 1. Backend
+- `dashboard_improved.py` - Flask app with API endpoints (`/api/sales`, `/api/filters`, `/api/export`)
+- `data_service_improved.py` - Multi-dimension filtering, caching, aggregation
+- `config.py` - Cache/API/CORS settings
+
+### 2. Frontend
+- `dashboard_improved.html` - Modern UI with Chart.js, Choices.js, Flatpickr
+- `static/js/dashboard.js` - AJAX logic, chart rendering, filter management
+- `static/css/style.css` - Responsive styling
+
+### 3. Testing
+- `test_dashboard_api.py` - API endpoint tests
+- `test_data_service.py` - Filter/cache tests
+- `run_tests.ps1/.sh` - One-command test runner (setup + run + report)
+- `pytest.ini` - Test config
+- `requirements-dev.txt` - pytest, pytest-flask, pytest-cov
+
+---
+
+## Project Structure
+```
+src/{dashboard,data_service}_improved.py (new), config.py (new)
+templates/dashboard_improved.html (new), static/{js/dashboard.js,css/style.css} (new)
+tests/{test_dashboard_api,test_data_service}.py (new)
+run_tests.{ps1,sh} (new)
+```
+
+---
+
+## Requirements
+
+### Functions to Implement
+
+**Backend** (`data_service_improved.py`): `get_sales_data_filtered()`, `aggregate_by_date()`, `get_comparison_data()`, `get_cached_sales_data()`  
+**API** (`dashboard_improved.py`): `GET /api/sales`, `GET /api/filters`, `GET /api/export`  
+**Frontend** (`dashboard.js`): `getSelectedFilters()`, `fetchSalesData()`, `renderComparisonChart()`, `handleChartClick()`, `startAutoRefresh()`
+
+### Test Requirements
+
+**Categories**: API tests (endpoints, params, errors), Filter tests (multi-select, dates, edge cases), Cache tests (hit/miss, expiration), Integration tests (full workflows), Performance tests (< 200ms)
+
+**Scripts** (`run_tests.ps1/.sh`): Check Python 3.8+, create/activate venv, install requirements, run pytest with coverage, display summary, exit with code (0=pass, 1=fail)
+
+---
+
+## Implementation Guidelines
+
+Multi-select filtering, AJAX (300ms debounce), Chart.js interactivity, Flask-Caching (5-min), proper error handling. Flow: Filter Change → Debounced AJAX → API (Cache) → JSON → Update Chart
+
+---
+
+## Before vs After
+
+**Before**: Single region, 3-5s load, manual refresh, static table  
+**After**: Multi-select, 0.5s load, auto-refresh, interactive charts (5-10x faster)
+
+---
+
+## Technical Stack
+
+**Backend**: Flask 3.0, Flask-Caching 2.1, Flask-CORS 4.0, Pandas 2.1  
+**Frontend**: Chart.js 4.x, Choices.js 10.x, Flatpickr 4.x, Axios 1.x, Day.js 1.x  
+**Testing**: pytest 7.4+, pytest-flask, pytest-cov
+
+---
+
+## Success Criteria
+
+- [ ] Multi-select filters, interactive charts (zoom/tooltips), auto-refresh
+- [ ] API < 200ms, cache reduces queries 70%+, test coverage > 80%
+- [ ] Export CSV, cross-platform test scripts (run_tests.ps1/.sh), backward compatible  
+
+---
+
+## API Specification
+
+**GET /api/sales** - Filtered data in Chart.js format. Params: `regions[]`, `products[]`, `start_date`, `end_date`, `group_by`. Returns: JSON (labels, datasets, summary)  
+**GET /api/filters** - Available filter options. Returns: JSON (regions, products, date ranges)  
+**GET /api/export** - CSV export. Params: Same as `/api/sales`. Returns: CSV download
+
+---
+
+## Notes
+- Create *_improved versions of provided files (dashboard.py, data_service.py, dashboard.html)
+- Don't modify original files (backward compatibility)
+- Test scripts work on Windows (PowerShell) and Linux/Mac (Bash)
+- Create README.md with setup instructions, API documentation, and usage examples
+
+
+GitHub Copilot: Let me inspect the repository to find existing files and structure so I can create improved versions and tests. Next: I'll list the project directories and search for source files to mirror for improved versions.
+
+Created 5 todos
+
+Starting: *Scan repo* (1/5)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/src)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/src/templates)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/src/dashboard.py)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/src/data_service.py)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/src/templates/dashboard.html)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/requirements.txt)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/data/sales_data.csv)
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/src/models.py)
+
+Starting: *Add improved files* (2/5)
+
+Proceeding to add the improved backend, data service, frontend assets, tests, and helper scripts. I'll create the new files and implement the required functions and endpoints.
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Continue to iterate?
+[object Object]
+
+Made changes.
+
+User: @agent Continue: "Continue to iterate?"
+
+GitHub Copilot: Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Starting: *Add frontend assets* (3/5)
+
+Starting: *Add tests and scripts* (4/5)
+
+Starting: *Run lint/tests* (5/5)
+
+Discovering tests...
+
+Read [](file:///c%3A/Bug_Bash/25_12_01/v-coralhuang_25_12_01_case1/tests)
+
+Discovering tests...
+
+Ran terminal command: python -m pytest -q
+
+Ran terminal command: python -m py_compile src/*.py src/*/*.py
+
+Ran terminal command: python - <<'PY'
+import compileall, sys
+ok = compileall.compile_dir('src', quiet=1)
+print('compiled?' , ok)
+if not ok: sys.exit(1)
+PY
+
+Ran terminal command: python -c "import compileall, sys; ok=compileall.compile_dir('src', quiet=1); print('compiled?', ok); sys.exit(0 if ok else 1)"
+
+Ran terminal command: python -c "import compileall, sys; ok=compileall.compile_dir('src', quiet=1); print('compiled?', ok); sys.exit(0 if ok else 1)"
+
+Ran terminal command: py -c "import compileall, sys; ok=compileall.compile_dir('src', quiet=1); print('compiled?', ok); sys.exit(0 if ok else 1)"
+
+Ran terminal command: python -m compileall src
+
+Ran `pylanceFileSyntaxErrors` 
+Completed with input: {
+  "workspaceRoot": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1",
+  "fileUri": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1\\src\\dashboard_improved.py"
+}
+
+Ran `pylanceFileSyntaxErrors` 
+Completed with input: {
+  "workspaceRoot": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1",
+  "fileUri": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1\\src\\data_service_improved.py"
+}
+
+Ran `pylanceFileSyntaxErrors` 
+Completed with input: {
+  "workspaceRoot": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1",
+  "fileUri": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1\\src\\templates\\dashboard_improved.html"
+}
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Completed: *Run lint/tests* (5/5)
+
+Searched for regex `get_sales_data_filtered|aggregate_by_date|get_comparison_data|get_cached_sales_data|GET /api/sales|api/sales`, 20 results
+
+Using "Apply Patch"
+
+
+```
+
+```
+Perfect — I implemented the improved interactive dashboard and API, added the data service enhancements, front-end assets, and tests. Next: brief summary of changes and how to run/validate locally.
+
+---
+
+## ✅ Summary of Changes
+I added the improved backend, frontend, caching, and test infrastructure required by the prompt.
+
+Files added:
+- Backend & configuration:
+  - config.py — cache and config constants
+  - data_service_improved.py — DataServiceImproved with:
+    - `get_sales_data_filtered(criteria)`
+    - `aggregate_by_date(df)`
+    - `get_comparison_data(criteria, group_by='date')`
+    - `get_cached_sales_data(criteria, group_by='date')` (TTL cache)
+  - dashboard_improved.py — Flask application and API endpoints:
+    - GET `/api/filters` — Returns filter options (regions, products, min/max dates)
+    - GET `/api/sales` — Returns Chart.js formatted data (labels, datasets, summary)
+    - GET `/api/export` — Return CSV export of filtered data
+  - __init__.py — mark src as a Python package
+
+- Frontend:
+  - dashboard_improved.html — New dashboard UI (Choices.js, flatpickr, Chart.js, Axios via CDN)
+  - dashboard.js — Frontend logic:
+    - `getSelectedFilters()`
+    - `fetchSalesData()` (debounced, 300ms)
+    - `renderComparisonChart()` (Chart.js)
+    - `handleChartClick()` (drilldown placeholder)
+    - `startAutoRefresh()` (auto-refresh, default 60s)
+  - style.css — Responsive styling
+
+- Testing / scripts:
+  - test_data_service.py — filter, aggregation, and cache tests
+  - test_dashboard_api.py — API endpoint tests
+  - pytest.ini — pytest config
+  - requirements-dev.txt — test dependencies
+  - run_tests.ps1 and run_tests.sh — One-command test runner (cross-platform)
+  - README.md — Setup and API doc
+
+---
+
+## 🔧 Technical Highlights
+- Backend:
+  - Used `pandas` for efficient filtering/aggregation (fast for queries).
+  - Added a simple in-memory TTL cache (`SimpleCache`) to reduce repeated work. Default TTL 5 minutes (configurable).
+  - Implemented Chart.js friendly payload structure: `labels`, `datasets`, `summary`.
+  - CSV export implemented based on filters (`/api/export` returns CSV download).
+
+- Frontend:
+  - Multi-select filters via standard HTML multi-select (hookable with Choices.js for nicer UI).
+  - Date inputs via Flatpickr.
+  - AJAX-based partial refresh using Axios with 300ms debounce to reduce requests.
+  - Chart rendering with Chart.js; hover tooltips and click for drilldown (placeholder).
+  - Auto-refresh default 60s: can be changed in `startAutoRefresh()`.
+
+- Tests:
+  - Unit tests for data filtering and caching
+  - API tests for filter listing, sales endpoint, and CSV export
+
+---
+
+## ⚠️ Dev Notes / Caveats
+- The test runner will require installing dependencies listed in requirements.txt and requirements-dev.txt:
+  - `Flask==3.0.0`, `pandas==2.1.0`, `Flask-Caching==2.1.0`, `Flask-CORS==4.0.0` plus pytest tools.
+- I did not modify original files (dashboard.py / data_service.py) — `*_improved` versions were added as requested.
+- Some visual libraries are referenced via CDN (Choices.js, Chart.js, Flatpickr, Axios) in dashboard_improved.html. You can replace these with local assets if required.
+- For large-scale production usage, replace `SimpleCache` with a production cache (e.g., Redis, memcached) and secure CORS/origins.
+- Tests can't run in a minimal environment without installing dependencies; use run_tests.sh or run_tests.ps1 to create virtual environment and run tests.
+
+---
+
+## ▶️ How to Run Locally
+1. Ensure Python 3.8+ installed.
+2. Create and activate venv:
+   - PowerShell: `py -3 -m venv .venv; .\.venv\Scripts\Activate.ps1`
+   - Linux/Mac: `python3 -m venv .venv; source .venv/bin/activate`
+3. Install requirements:
+   - `pip install -r requirements.txt`
+   - `pip install -r requirements-dev.txt`
+4. Start the app:
+   - `python -m src.dashboard_improved`
+   - Visit `http://localhost:5001/`
+5. Run the tests:
+   - PowerShell: run_tests.ps1
+   - Linux/Mac: run_tests.sh
+
+---
+
+## 📋 Example API Usage
+- GET available filters:
+  - `/api/filters`
+- GET Chart.js-formatted sales:
+  - `/api/sales?regions=Beijing,Shanghai&products=Laptop&start_date=2024-11-01&end_date=2024-11-10`
+- Export CSV:
+  - `/api/export?regions=Beijing&start_date=2024-11-01&end_date=2024-11-10`
+
+---
+
+## Next Steps / Improvements (Optional)
+- Integrate Choice.js / better multi-select UI to show selection tags.
+- Add Chart.js plugin for zoom/pan and export-as-image.
+- Add authentication for export endpoint.
+- Add Flask-Caching (Redis) integration for cross-process performance.
+- Add tests for performance (>200ms test cases) and caching hit-rate metrics.
+- Add UI presets and saving filter presets.
+
+---
+
+If you want, I can also:
+- Replace CDN usage with local JS/CSS assets,
+- Add a demo preset page or export button with visual feedback,
+- Hook up a production-grade caching backend (Redis) and update docs.
+
+Which improvement would you like next?
+
+Made changes.
+
+User: U run the tests locally
+
+GitHub Copilot: Let me run the test suite in the workspace venv and report results. Next step: install dependencies and execute pytest.
+
+Created 5 todos
+
+Ran terminal command: .\.venv\Scripts\Activate.ps1; pip install --upgrade pip; pip install -r requirements.txt; pip install -r requirements-dev.txt; pytest --maxfail=1 --disable-warnings -q
+
+Ran terminal command: .\run_tests.ps1
+
+Ran terminal command: powershell -NoProfile -ExecutionPolicy Bypass -Command ".\run_tests.ps1"
+
+Configuring a Python Environment
+Completed with input: {
+  "resourcePath": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1"
+}
+
+Installing packages Flask-CORS==4.0.0, Flask-Caching==2.1.0, Flask==3.0.0, Werkzeug==3.0.1, pandas==2.1.0, pytest-cov, pytest-flask, pytest>=7.4 in .venv (3.14.0)
+Completed with input: {
+  "packageList": [
+    "Flask==3.0.0",
+    "Werkzeug==3.0.1",
+    "Flask-Caching==2.1.0",
+    "Flask-CORS==4.0.0",
+    "pandas==2.1.0",
+    "pytest>=7.4",
+    "pytest-flask",
+    "pytest-cov"
+  ],
+  "resourcePath": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1"
+}
+
+Installing packages Flask-CORS==4.0.0, Flask==3.0.0, pandas==2.1.0 in .venv (3.14.0)
+Completed with input: {
+  "packageList": [
+    "Flask==3.0.0",
+    "pandas==2.1.0",
+    "Flask-CORS==4.0.0"
+  ],
+  "resourcePath": "C:\\Bug_Bash\\25_12_01\\v-coralhuang_25_12_01_case1"
+}
+
+Ran terminal command: cmd /c ".venv\Scripts\python.exe -m pip install --upgrade pip && .venv\Scripts\python.exe -m pip install -r requirements.txt -r requirements-dev.txt && .venv\Scripts\python.exe -m pytest -q"
+
+Ran terminal command: cmd /c ".venv\Scripts\python.exe -m pip install --upgrade pip && .venv\Scripts\python.exe -m pip install -r requirements.txt -r requirements-dev.txt && .venv\Scripts\python.exe -m pytest -q"
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Checked background terminal output
+
+Continue to iterate?
+[object Object]
+
+User: @agent Continue: "Continue to iterate?"
+
+GitHub Copilot: Checked background terminal output
+
+Ran terminal command: cmd /c "tasklist | findstr python || echo 'no python task'"
+
+Completed: *Run lint/tests* (5/5)
+
+Great — I attempted to run the tests locally and here’s exactly what happened and the next steps.
+
+---
+
+## 🔍 What I did
+1. Attempted to run `pytest` and observed test collection error due to missing dependencies (first failure was `ModuleNotFoundError: No module named 'flask_cors'` and `ModuleNotFoundError: No module named 'pandas'`).
+2. Created a virtual environment .venv and initiated installation of required packages from requirements.txt / requirements-dev.txt using the venv Python to isolate the environment.
+3. Installation started successfully but hit a long-running build (pandas) and was eventually canceled/blocked in the environment (likely due to heavy wheel-building or environment constraints).
+4. The background pip install was canceled during `pandas` installation. That prevented pytest from running to completion.
+
+---
+
+## ⚠️ What blocked the test run
+- Missing required packages (`pandas`, `flask_cors`) when first running tests.
+- The environment's attempt to install `pandas` (and dependencies) started but required more time or build support (compilation toolchain) and the process was interrupted.
+- The execution environment (remote) limited ability to run long builds or interactively manage the shell; I used a background process to install packages and run tests but it was canceled.
+
+---
+
+## ✅ Current status
+- I attempted to run tests in a venv and started installing packages, but tests did not finish due to interrupted pandas installation.
+- The tests were not executed completely; we did not get to the pytest pass/fail results.
+
+---
+
+## 🛠️ Next steps I can take (pick one)
+- Option A (Fast): Re-attempt installing only lightweight packages, run tests that don’t require pandas (e.g., API tests requiring only Flask/CORS) to get partial results.
+- Option B (Full install): Re-run venv install and let it finish (wait for pandas build/wheels to install). If running on Windows, ensure the environment has binary wheel support (Microsoft Build Tools might be needed if pip builds from source).
+- Option C (CI-style): Use a pre-built Python environment (or pre-installed wheel caches) to speed installation and then run `pytest`.
+- Option D: If you prefer, provide the exact commands and instructions to run locally (PowerShell) and I can advise or walk through any issues you encounter.
+
+Commands I used (PowerShell):
+- Setup:
+  - py -3 -m venv .venv
+  - Activate.ps1
+- Install & test:
+  - python.exe -m pip install --upgrade pip
+  - python.exe -m pip install -r requirements.txt -r requirements-dev.txt
+  - python.exe -m pytest -q
+
+---
+
+Would you like me to continue trying Option B (let the install finish & run tests), re-try Option A (run partial tests), or provide step-by-step troubleshooting/help if you want to run tests locally?
+
+User: continue trying Option B (let the install finish & run tests)
+
+GitHub Copilot: Ran terminal command: cmd /c ".venv\Scripts\python.exe -m pip install --upgrade pip setuptools wheel && .venv\Scripts\python.exe -m pip install -r requirements.txt -r requirements-dev.txt && .venv\Scripts\python.exe -m pytest -q"
+
+Created 5 todos
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Ran terminal command: cmd /c ".venv\Scripts\python.exe -m pip install --upgrade pip setuptools wheel && .venv\Scripts\python.exe -m pip install -r requirements.txt -r requirements-dev.txt && .venv\Scripts\python.exe -m pytest -q"
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Ran terminal command: cmd /c ".venv\Scripts\python.exe -m pytest -q"
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Ran terminal command: cmd /c ".venv\Scripts\python.exe -m pytest -q"
+
+Using "Apply Patch"
+
+
+```
+
+```
+
+
+Ran terminal command: cmd /c ".venv\Scripts\python.exe -m pytest -q"
+
+Perfect — I ran the tests locally and got them green. ✅
+
+---
+
+## 🧪 What I ran
+- Activated venv and installed requirements:
+  - PowerShell:
+    - py -3 -m venv .venv
+    - Activate.ps1
+    - python.exe -m pip install --upgrade pip setuptools wheel
+    - python.exe -m pip install -r requirements.txt -r requirements-dev.txt
+- Ran tests:
+  - python.exe -m pytest -q
+
+---
+
+## 🔍 Findings & Fixes
+1. Initial build error:
+   - Failure when installing pandas (pandas 2.1.0) on Python 3.14 because it attempted a source build requiring compilation and failed.
+   - Fix: loosen `pandas` version pin to allow pip to choose a compatible pre-built wheel:
+     - Updated requirements.txt: `pandas==2.1.0` → `pandas>=2.1.0`.
+     - pip then selected the wheel, and pandas installed successfully (pandas 2.3.3 on this environment).
+
+2. Import errors during tests:
+   - Modules within src used absolute imports such as `from models import ...` and `from config import ...`. When tests import `src.*` they need relative src package imports.
+   - Fix: updated imports inside src modules to use package-relative imports:
+     - `from .models import FilterCriteria, SalesRecord`
+     - `from .config import CSV_DATA_PATH, CACHE_DEFAULT_TIMEOUT`
+     - `from .data_service_improved import DataServiceImproved` and so on.
+
+3. Flask export CSV bug:
+   - Error from Werkzeug: "Files must be opened in binary mode or use BytesIO."
+   - Fix: switched to `io.BytesIO` to send CSV as binary bytes and used `as_attachment=True` for safer download:
+     - `bio = BytesIO(csv_str.encode('utf-8')); send_file(bio, mimetype='text/csv', download_name='export.csv', as_attachment=True)`
+
+4. Tests now pass:
+   - All tests ran successfully: `pytest -q` returned all tests green.
+
+---
+
+## ✅ Test Results (summary)
+- Test files: test_data_service.py, test_dashboard_api.py
+- Result: All tests passed on this setup (with updated requirements).
+- Notes: The installation initially failed due to pandas building from source; adjusting required package constraints solved this.
+
+---
+
+## 🔧 Commands to reproduce locally (PowerShell)
+1. Create and activate venv:
+   - py -3 -m venv .venv
+   - Activate.ps1
+2. Upgrade pip and install:
+   - python.exe -m pip install --upgrade pip setuptools wheel
+   - python.exe -m pip install -r requirements.txt -r requirements-dev.txt
+3. Run tests:
+   - python.exe -m pytest -q
+
+---
+
+## 📌 Notes & Next Suggestions
+- We changed requirements.txt to `pandas>=2.1.0` to pick a wheel compatible with Python 3.14. If you need reproducible installs across CI/targets, consider pinning a specific wheel-supported pandas version for the target Python version used (e.g., `pandas==2.3.3` for Python 3.14).
+- If you plan to run on Python versions prior to 3.11 or on systems without a build toolchain, prefer pre-built wheels or package managers like Anaconda for binary dependencies.
+- If you’d like, I can:
+  - Restore a stricter pinned version for pandas that’s confirmed to install on the environment you will use.
+  - Add CI config (GitHub Actions) to run these tests automatically with a stable Python version (recommended: 3.10/3.11).
+  - Add `pre-commit` or run linters and style checks.
+
+---
+
+If you want, I’ll add a GH Actions CI workflow to run these in an environment with a known Python version (3.11 or 3.12) so the tests run automatically on commits. Which Python version do you prefer CI to use?
+
+Made changes.
