@@ -1,0 +1,16 @@
+/* Basic styles for improved dashboard */
+body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 16px; background: #f5f7fb; }
+.container { max-width: 1200px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+header h1 { margin: 0; }
+.subtitle { color: #555; margin-top: 4px; }
+.controls .control-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.control { min-width: 220px; }
+.control label { display:block; margin-bottom: 6px; font-weight: 600; }
+.control select, .control input { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #e1e7ef; }
+.buttons { display:flex; gap: 8px; }
+button { background: #007bff; color: white; padding: 8px 12px; border-radius: 6px; border: none; cursor:pointer; }
+.chart-area { margin-top: 20px; position: relative; }
+.data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.data-table th, .data-table td { border: 1px solid #eef2f8; padding: 8px; text-align: left; }
+.spinner { position: absolute; left: 12px; top: 12px; background: rgba(255,255,255,0.85); padding: 6px 10px; border-radius: 6px; border: 1px solid #e1e7ef; }
+.hidden { display: none; }
