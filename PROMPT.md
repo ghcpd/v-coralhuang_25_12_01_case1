@@ -1,0 +1,123 @@
+# Task: Enhance Sales Dashboard with Interactive Features
+
+Transform the provided static sales dashboard into an **interactive, multi-dimensional analytics platform** with **real-time filtering**, **dynamic charts**, and **AJAX-based updates**.
+
+---
+
+## Goal
+Modernize the dashboard to support multi-region/product comparison, custom date ranges, interactive visualizations, and partial page updates for improved user experience.
+
+---
+
+## Problem Statement
+
+### Current Issues
+1. **Limited Filtering** - Single-select only, fixed time ranges
+2. **Poor Performance** - Full page reload (3-5s) every filter change
+3. **Static Visualization** - Plain tables, no interactive charts
+4. **No Real-time Updates** - Manual refresh only
+5. **Lost Context** - State resets after each query
+
+**User Impact**: Sales managers must make multiple separate queries, manually compare results, wait through repeated page loads. Result: frustration and inefficient decision-making.
+
+---
+
+## Feature: Interactive Dashboard System
+
+### Core Capabilities
+1. **Multi-Dimension Filters** - Select multiple regions/products, custom date ranges, save presets
+2. **Interactive Charts** - Hover tooltips, click drill-down, zoom/pan, export images
+3. **AJAX Partial Refresh** - Update chart only (< 1s), loading animations, preserve state
+4. **Auto-Refresh** - Configurable intervals (30s/1min/5min), pause when inactive
+
+---
+
+## Deliverables
+
+### 1. Backend
+- `dashboard_improved.py` - Flask app with API endpoints (`/api/sales`, `/api/filters`, `/api/export`)
+- `data_service_improved.py` - Multi-dimension filtering, caching, aggregation
+- `config.py` - Cache/API/CORS settings
+
+### 2. Frontend
+- `dashboard_improved.html` - Modern UI with Chart.js, Choices.js, Flatpickr
+- `static/js/dashboard.js` - AJAX logic, chart rendering, filter management
+- `static/css/style.css` - Responsive styling
+
+### 3. Testing
+- `test_dashboard_api.py` - API endpoint tests
+- `test_data_service.py` - Filter/cache tests
+- `run_tests.ps1/.sh` - One-command test runner (setup + run + report)
+- `pytest.ini` - Test config
+- `requirements-dev.txt` - pytest, pytest-flask, pytest-cov
+
+---
+
+## Project Structure
+```
+src/{dashboard,data_service}_improved.py (new), config.py (new)
+templates/dashboard_improved.html (new), static/{js/dashboard.js,css/style.css} (new)
+tests/{test_dashboard_api,test_data_service}.py (new)
+run_tests.{ps1,sh} (new)
+```
+
+---
+
+## Requirements
+
+### Functions to Implement
+
+**Backend** (`data_service_improved.py`): `get_sales_data_filtered()`, `aggregate_by_date()`, `get_comparison_data()`, `get_cached_sales_data()`  
+**API** (`dashboard_improved.py`): `GET /api/sales`, `GET /api/filters`, `GET /api/export`  
+**Frontend** (`dashboard.js`): `getSelectedFilters()`, `fetchSalesData()`, `renderComparisonChart()`, `handleChartClick()`, `startAutoRefresh()`
+
+### Test Requirements
+
+**Categories**: API tests (endpoints, params, errors), Filter tests (multi-select, dates, edge cases), Cache tests (hit/miss, expiration), Integration tests (full workflows), Performance tests (< 200ms)
+
+**Scripts** (`run_tests.ps1/.sh`): Check Python 3.8+, create/activate venv, install requirements, run pytest with coverage, display summary, exit with code (0=pass, 1=fail)
+
+---
+
+## Implementation Guidelines
+
+Multi-select filtering, AJAX (300ms debounce), Chart.js interactivity, Flask-Caching (5-min), proper error handling. Flow: Filter Change → Debounced AJAX → API (Cache) → JSON → Update Chart
+
+---
+
+## Before vs After
+
+**Before**: Single region, 3-5s load, manual refresh, static table  
+**After**: Multi-select, 0.5s load, auto-refresh, interactive charts (5-10x faster)
+
+---
+
+## Technical Stack
+
+**Backend**: Flask 3.0, Flask-Caching 2.1, Flask-CORS 4.0, Pandas 2.1  
+**Frontend**: Chart.js 4.x, Choices.js 10.x, Flatpickr 4.x, Axios 1.x, Day.js 1.x  
+**Testing**: pytest 7.4+, pytest-flask, pytest-cov
+
+---
+
+## Success Criteria
+
+- [ ] Multi-select filters, interactive charts (zoom/tooltips), auto-refresh
+- [ ] API < 200ms, cache reduces queries 70%+, test coverage > 80%
+- [ ] Export CSV, cross-platform test scripts (run_tests.ps1/.sh), backward compatible  
+
+---
+
+## API Specification
+
+**GET /api/sales** - Filtered data in Chart.js format. Params: `regions[]`, `products[]`, `start_date`, `end_date`, `group_by`. Returns: JSON (labels, datasets, summary)  
+**GET /api/filters** - Available filter options. Returns: JSON (regions, products, date ranges)  
+**GET /api/export** - CSV export. Params: Same as `/api/sales`. Returns: CSV download
+
+---
+
+## Notes
+- Create *_improved versions of provided files (dashboard.py, data_service.py, dashboard.html)
+- Don't modify original files (backward compatibility)
+- Test scripts work on Windows (PowerShell) and Linux/Mac (Bash)
+- Create README.md with setup instructions, API documentation, and usage examples

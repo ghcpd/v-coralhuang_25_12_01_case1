@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard - Current Version (Needs Improvement)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .warning-banner {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .filter-group {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+        .filter-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .chart-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            text-align: center;
+        }
+        .problem-indicator {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Sales Data Dashboard</h1>
+        
+        <div class="warning-banner">
+            <strong>⚠️ Current Version Issues:</strong>
+            <ul style="margin: 10px 0 0 20px;">
+                <li>Each filter requires refreshing entire page (3-5 second load time)</li>
+                <li>Only single selection for region or product, cannot do multi-dimension comparison</li>
+                <li>Fixed time range options, cannot customize dates</li>
+                <li>Static data table, no chart visualization</li>
+                <li>No interactive tooltips and detailed information</li>
+            </ul>
+        </div>
+
+        <form method="GET" action="/">
+            <div class="filter-section">
+                <h3>Filter Criteria</h3>
+                
+                <div class="filter-group">
+                    <label for="region">Region (Single Select)</label>
+                    <select name="region" id="region">
+                        <option value="">-- All Regions --</option>
+                        {% for r in regions %}
+                        <option value="{{ r }}" {% if r == selected_region %}selected{% endif %}>
+                            {{ r }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div class="problem-indicator">❌ Can only select one region</div>
+                </div>
+
+                <div class="filter-group">
+                    <label for="product">Product (Single Select)</label>
+                    <select name="product" id="product">
+                        <option value="">-- All Products --</option>
+                        {% for p in products %}
+                        <option value="{{ p }}" {% if p == selected_product %}selected{% endif %}>
+                            {{ p }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div class="problem-indicator">❌ Can only select one product</div>
+                </div>
+
+                <div class="filter-group">
+                    <label for="time_range">Time Range (Fixed Options)</label>
+                    <select name="time_range" id="time_range">
+                        <option value="7days" {% if selected_time == '7days' %}selected{% endif %}>
+                            Last 7 Days
+                        </option>
+                        <option value="30days" {% if selected_time == '30days' %}selected{% endif %}>
+                            Last 30 Days
+                        </option>
+                    </select>
+                    <div class="problem-indicator">❌ Cannot customize date range</div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button type="submit">🔍 Query (Will refresh entire page)</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="chart-container">
+            <h3>Sales Data Display</h3>
+            <div style="padding: 40px; background: #f8f9fa; border-radius: 5px;">
+                <p style="color: #666; font-size: 18px;">
+                    📈 Current Version: Static Data Table
+                </p>
+                <p style="color: #999; font-size: 14px;">
+                    After Improvement: Interactive Charts (hover, zoom, drill-down)
+                </p>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Region</th>
+                        <th>Product</th>
+                        <th>Sales Amount</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if data.records %}
+                        {% for record in data.records[:10] %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.region }}</td>
+                            <td>{{ record.product }}</td>
+                            <td>${{ "%.2f"|format(record.sales_amount) }}</td>
+                            <td>{{ record.quantity }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% if data.total > 10 %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #666;">
+                                ... {{ data.total - 10 }} more records
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #999;">
+                                No data available
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px; color: #666;">
+                <strong>Total Records:</strong> {{ data.total }}
+                <div class="problem-indicator" style="margin-top: 10px;">
+                    ❌ Missing data summary and trend charts<br>
+                    ❌ Cannot perform data comparison analysis<br>
+                    ❌ No auto-refresh functionality
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 15px; background: #e7f3ff; border-radius: 5px;">
+            <h4 style="margin-top: 0;">💡 Post-Improvement Feature Preview:</h4>
+            <ul>
+                <li>✅ Multi-select filters - Compare multiple regions/products simultaneously</li>
+                <li>✅ Flexible date picker - Support custom date ranges</li>
+                <li>✅ Interactive charts - Mouse hover for details, click to drill down</li>
+                <li>✅ AJAX partial refresh - Only refresh chart area, no page reload</li>
+                <li>✅ Auto-refresh - Optional scheduled data updates</li>
+                <li>✅ Better visual effects - Using Chart.js or ECharts</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Current version: Traditional form submission, no AJAX
+        console.log('⚠️ Current version uses traditional form submission, each query refreshes entire page');
+        console.log('After improvement will use AJAX for partial refresh, enhancing user experience');
+    </script>
+</body>
+</html>
