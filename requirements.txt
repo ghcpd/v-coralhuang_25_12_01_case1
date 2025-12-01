@@ -1,8 +1,13 @@
-# Current version dependencies
+# Enhanced Sales Dashboard - Production Dependencies
+
+# Core Framework
 Flask==3.0.0
 Werkzeug==3.0.1
 
-# Dependencies to be added in improved version:
-# Flask-Caching==2.1.0    # Data caching
-# Flask-CORS==4.0.0       # CORS support
-# pandas==2.1.0           # Data processing
+# Enhanced Features
+Flask-Caching==2.1.0      # Data caching with 5-minute TTL
+Flask-CORS==4.0.0         # CORS support for API endpoints
+pandas==2.1.0             # Data processing and aggregation
+
+# Note: Frontend libraries (Chart.js, Choices.js, etc.) are loaded via CDN
+# in dashboard_improved.html and do not require installation
