@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Sales Dashboard - Interactive Analytics</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid mt-4">
+        <!-- Header -->
+        <div class="header-section mb-4">
+            <h1>
+                <i class="fas fa-chart-line"></i> Interactive Sales Dashboard
+            </h1>
+            <p class="text-muted">Real-time analytics with multi-dimension filtering and interactive visualizations</p>
+        </div>
+
+        <!-- Filter Panel -->
+        <div class="filter-card mb-4">
+            <div class="filter-header">
+                <h5>
+                    <i class="fas fa-filter"></i> Filters
+                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" id="clearFiltersBtn">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </h5>
+            </div>
+
+            <div class="filter-grid">
+                <!-- Region Multi-Select -->
+                <div class="filter-group">
+                    <label for="regionSelect" class="form-label">Regions</label>
+                    <select id="regionSelect" class="form-select" multiple data-placeholder="Select regions...">
+                        <option value="">All Regions</option>
+                    </select>
+                    <small class="text-muted">Select multiple regions for comparison</small>
+                </div>
+
+                <!-- Product Multi-Select -->
+                <div class="filter-group">
+                    <label for="productSelect" class="form-label">Products</label>
+                    <select id="productSelect" class="form-select" multiple data-placeholder="Select products...">
+                        <option value="">All Products</option>
+                    </select>
+                    <small class="text-muted">Select multiple products for comparison</small>
+                </div>
+
+                <!-- Start Date -->
+                <div class="filter-group">
+                    <label for="startDateInput" class="form-label">Start Date</label>
+                    <input type="text" id="startDateInput" class="form-control" 
+                           placeholder="YYYY-MM-DD" data-input>
+                    <small class="text-muted">Pick a custom date range</small>
+                </div>
+
+                <!-- End Date -->
+                <div class="filter-group">
+                    <label for="endDateInput" class="form-label">End Date</label>
+                    <input type="text" id="endDateInput" class="form-control" 
+                           placeholder="YYYY-MM-DD" data-input>
+                    <small class="text-muted">or use presets</small>
+                </div>
+
+                <!-- Aggregation -->
+                <div class="filter-group">
+                    <label for="aggregationSelect" class="form-label">Group By</label>
+                    <select id="aggregationSelect" class="form-select">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                    <small class="text-muted">Data aggregation interval</small>
+                </div>
+
+                <!-- Auto-Refresh -->
+                <div class="filter-group">
+                    <label for="autoRefreshSelect" class="form-label">Auto-Refresh</label>
+                    <select id="autoRefreshSelect" class="form-select">
+                        <option value="0">Disabled</option>
+                        <option value="30">30 Seconds</option>
+                        <option value="60" selected>1 Minute</option>
+                        <option value="300">5 Minutes</option>
+                    </select>
+                    <small class="text-muted">Auto-refresh interval</small>
+                </div>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="preset-buttons mt-3">
+                <label class="d-block mb-2"><small class="text-muted">Quick Presets:</small></label>
+                <button class="btn btn-outline-primary btn-sm" data-preset="7days">Last 7 Days</button>
+                <button class="btn btn-outline-primary btn-sm" data-preset="30days">Last 30 Days</button>
+                <button class="btn btn-outline-primary btn-sm" data-preset="90days">Last 90 Days</button>
+                <button class="btn btn-outline-primary btn-sm" data-preset="all">All Time</button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards mb-4">
+            <div class="summary-card">
+                <div class="summary-icon" style="color: #007bff;">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="summary-content">
+                    <small class="text-muted">Total Sales</small>
+                    <h4 id="totalSalesValue">$0.00</h4>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon" style="color: #28a745;">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="summary-content">
+                    <small class="text-muted">Total Quantity</small>
+                    <h4 id="totalQuantityValue">0</h4>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon" style="color: #ffc107;">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="summary-content">
+                    <small class="text-muted">Average Sales</small>
+                    <h4 id="averageSalesValue">$0.00</h4>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon" style="color: #17a2b8;">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="summary-content">
+                    <small class="text-muted">Records</small>
+                    <h4 id="recordCountValue">0</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-card mb-4">
+            <div class="chart-header d-flex justify-content-between align-items-center">
+                <h5>
+                    <i class="fas fa-chart-area"></i> Sales Trend & Quantity Analysis
+                    <span class="badge bg-info" id="cacheIndicator" style="display: none;">
+                        <i class="fas fa-bolt"></i> Cached
+                    </span>
+                </h5>
+                <div class="chart-actions">
+                    <button class="btn btn-sm btn-outline-secondary" id="downloadChartBtn" title="Download as PNG">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" id="exportCSVBtn" title="Export as CSV">
+                        <i class="fas fa-file-csv"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="text-center text-muted" style="display: none; padding: 20px;">
+                <div class="spinner-border text-primary me-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                Loading data...
+            </div>
+
+            <!-- Chart Container -->
+            <div id="chartContainer" class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-danger" role="alert" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText"></span>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <h5>
+                    <i class="fas fa-table"></i> Detailed Records
+                </h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Region</th>
+                            <th>Product</th>
+                            <th>Sales Amount</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Select filters and load data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-section text-center text-muted mt-5 mb-3">
+            <small>Enhanced Sales Dashboard • Real-time Analytics • AJAX-powered Updates</small>
+        </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.9/dayjs.min.js"></script>
+
+    <!-- Custom Dashboard JS -->
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
