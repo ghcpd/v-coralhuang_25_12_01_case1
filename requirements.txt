@@ -8,8 +8,8 @@ Werkzeug==3.0.1
 Flask-Caching==2.1.0    # Response caching for performance
 Flask-CORS==4.0.0       # Cross-origin resource sharing
 
-# Data Processing (optional but recommended)
-pandas==2.1.4           # Advanced data processing and analysis
-
 # Utilities
 python-dateutil==2.8.2  # Date parsing and manipulation
+
+# Note: pandas removed as it requires C++ compiler on Windows
+# The application works fine without it - CSV reading uses built-in Python csv module

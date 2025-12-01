@@ -254,7 +254,7 @@ class TestSalesEndpoint:
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
-        assert 'date range' in data['message'].lower()
+        assert 'start_date' in data['message'].lower() and 'end_date' in data['message'].lower()
 
 
 class TestExportEndpoint:

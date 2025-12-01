@@ -160,7 +160,13 @@ def get_sales_data():
                 'labels': result['chart']['labels'],
                 'datasets': result['chart']['datasets'],
                 'summary': result['summary'],
-                'metadata': result['metadata']
+                'metadata': {
+                    **result['metadata'],
+                    'filters': {
+                        **result['metadata']['filters'],
+                        'group_by': group_by
+                    }
+                }
             }
         
         return jsonify(response), 200
