@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Dashboard - Improved</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Sales Dashboard - Improved</h1>
+            <p class="subtitle">Interactive, multi-dimension analytics with AJAX partial refresh</p>
+        </header>
+
+        <section class="controls">
+            <div class="control-row">
+                <div class="control">
+                    <label for="regions">Regions</label>
+                    <select id="regions" multiple></select>
+                </div>
+                <div class="control">
+                    <label for="products">Products</label>
+                    <select id="products" multiple></select>
+                </div>
+                <div class="control">
+                    <label for="daterange">Date Range</label>
+                    <input id="daterange" type="text" />
+                </div>
+                <div class="control">
+                    <label for="group_by">Group By</label>
+                    <select id="group_by">
+                        <option value="date">Date</option>
+                        <option value="region">Region</option>
+                        <option value="product">Product</option>
+                    </select>
+                </div>
+                <div class="control">
+                    <label>&nbsp;</label>
+                    <div class="buttons">
+                        <button id="btnFetch">Fetch</button>
+                        <button id="btnExport">Export CSV</button>
+                        <button id="btnToggleAuto">Auto: Off</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="chart-area">
+            <div id="spinner" class="spinner hidden">Loading...</div>
+            <canvas id="salesChart" width="900" height="300" aria-label="Sales Chart"></canvas>
+        </section>
+
+        <section class="table-area">
+            <h3>Top Records</h3>
+            <table class="data-table" id="recordsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Region</th>
+                        <th>Product</th>
+                        <th>Sales Amount</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
