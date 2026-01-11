@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Sales Dashboard</title>
+    <!-- External libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <div>
+                <h1>📈 Interactive Sales Dashboard</h1>
+                <p class="subtitle">Multi-region & product comparison with live filtering</p>
+            </div>
+            <button id="export-btn" class="btn btn-secondary">⬇️ Export CSV</button>
+        </header>
+
+        <section class="filters-card">
+            <div class="filter-group">
+                <label for="region-select">Regions</label>
+                <select id="region-select" multiple></select>
+            </div>
+            <div class="filter-group">
+                <label for="product-select">Products</label>
+                <select id="product-select" multiple></select>
+            </div>
+            <div class="filter-group">
+                <label for="date-range">Date range</label>
+                <input id="date-range" type="text" placeholder="Select range" />
+            </div>
+            <div class="filter-group">
+                <label for="group-by">Group by</label>
+                <select id="group-by">
+                    <option value="day" selected>Day</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="auto-refresh">Auto-refresh</label>
+                <select id="auto-refresh">
+                    <option value="0">Off</option>
+                    <option value="30000">30s</option>
+                    <option value="60000">1 min</option>
+                    <option value="300000">5 min</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="summary-cards" id="summary">
+            <div class="card">
+                <div class="card-label">Total Sales</div>
+                <div class="card-value" id="summary-total-sales">-</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Total Quantity</div>
+                <div class="card-value" id="summary-total-qty">-</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Records</div>
+                <div class="card-value" id="summary-records">-</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Avg Order Value</div>
+                <div class="card-value" id="summary-aov">-</div>
+            </div>
+        </section>
+
+        <section class="chart-card">
+            <div class="chart-header">
+                <h2>Sales Trend</h2>
+                <div class="loading" id="chart-loading">Loading…</div>
+            </div>
+            <canvas id="sales-chart" height="100"></canvas>
+        </section>
+
+        <section class="table-card">
+            <h3>Latest Data Preview</h3>
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Region</th>
+                        <th>Product</th>
+                        <th>Sales Amount</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.5.1/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
