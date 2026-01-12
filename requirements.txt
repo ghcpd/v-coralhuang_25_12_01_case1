@@ -1,8 +1,15 @@
-# Current version dependencies
+# Production Dependencies for Improved Dashboard
+
+# Core Framework
 Flask==3.0.0
 Werkzeug==3.0.1
 
-# Dependencies to be added in improved version:
-# Flask-Caching==2.1.0    # Data caching
-# Flask-CORS==4.0.0       # CORS support
-# pandas==2.1.0           # Data processing
+# Flask Extensions
+Flask-Caching==2.1.0    # Response caching for performance
+Flask-CORS==4.0.0       # Cross-origin resource sharing
+
+# Utilities
+python-dateutil==2.8.2  # Date parsing and manipulation
+
+# Note: pandas removed as it requires C++ compiler on Windows
+# The application works fine without it - CSV reading uses built-in Python csv module

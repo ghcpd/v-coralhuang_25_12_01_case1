@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard - Interactive Analytics Platform</title>
+    
+    <!-- External CSS Libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1>📊 Sales Analytics Dashboard</h1>
+            <p class="subtitle">Interactive Multi-Dimensional Sales Analysis</p>
+            <div class="header-badges">
+                <span class="badge badge-success">✓ Real-time</span>
+                <span class="badge badge-info">✓ Multi-Select</span>
+                <span class="badge badge-primary">✓ Auto-Refresh</span>
+            </div>
+        </header>
+
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-header">
+                <h2>🔍 Filters</h2>
+                <div class="filter-actions">
+                    <button id="resetFilters" class="btn btn-secondary btn-sm">
+                        <span>↻</span> Reset
+                    </button>
+                    <button id="exportCsv" class="btn btn-success btn-sm">
+                        <span>⬇</span> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-grid">
+                <!-- Region Filter -->
+                <div class="filter-group">
+                    <label for="regionSelect">Regions</label>
+                    <select id="regionSelect" multiple>
+                        <!-- Options loaded dynamically -->
+                    </select>
+                    <small class="help-text">Hold Ctrl/Cmd to select multiple</small>
+                </div>
+
+                <!-- Product Filter -->
+                <div class="filter-group">
+                    <label for="productSelect">Products</label>
+                    <select id="productSelect" multiple>
+                        <!-- Options loaded dynamically -->
+                    </select>
+                    <small class="help-text">Hold Ctrl/Cmd to select multiple</small>
+                </div>
+
+                <!-- Date Range Filter -->
+                <div class="filter-group">
+                    <label for="dateRange">Date Range</label>
+                    <input type="text" id="dateRange" placeholder="Select date range">
+                </div>
+
+                <!-- Quick Range Filter -->
+                <div class="filter-group">
+                    <label for="quickRange">Quick Range</label>
+                    <select id="quickRange" class="form-select">
+                        <option value="7days">Last 7 days</option>
+                        <option value="30days" selected>Last 30 days</option>
+                        <option value="90days">Last 90 days</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                </div>
+
+                <!-- Group By Filter -->
+                <div class="filter-group">
+                    <label for="groupBy">Group By</label>
+                    <select id="groupBy" class="form-select">
+                        <option value="day" selected>Daily</option>
+                        <option value="week">Weekly</option>
+                        <option value="month">Monthly</option>
+                    </select>
+                </div>
+
+                <!-- Compare By Filter -->
+                <div class="filter-group">
+                    <label for="compareBy">Compare By</label>
+                    <select id="compareBy" class="form-select">
+                        <option value="none" selected>No Comparison</option>
+                        <option value="region">By Region</option>
+                        <option value="product">By Product</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auto-Refresh Control -->
+        <section class="auto-refresh-section">
+            <div class="refresh-controls">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="autoRefreshToggle">
+                    <span>Auto-Refresh</span>
+                </label>
+                <select id="refreshInterval" class="form-select-sm" disabled>
+                    <option value="30">Every 30s</option>
+                    <option value="60" selected>Every 1min</option>
+                    <option value="300">Every 5min</option>
+                </select>
+                <span id="lastUpdated" class="last-updated">Last updated: Never</span>
+            </div>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <span>Loading data...</span>
+        </div>
+
+        <!-- Summary Cards -->
+        <section id="summarySection" class="summary-section" style="display: none;">
+            <div class="summary-card">
+                <div class="card-icon">💰</div>
+                <div class="card-content">
+                    <div class="card-label">Total Sales</div>
+                    <div class="card-value" id="totalSales">$0</div>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon">📦</div>
+                <div class="card-content">
+                    <div class="card-label">Total Quantity</div>
+                    <div class="card-value" id="totalQuantity">0</div>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon">📈</div>
+                <div class="card-content">
+                    <div class="card-label">Average Sale</div>
+                    <div class="card-value" id="averageSale">$0</div>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="card-icon">📊</div>
+                <div class="card-content">
+                    <div class="card-label">Records</div>
+                    <div class="card-value" id="recordCount">0</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section">
+            <div class="chart-header">
+                <h2>📈 Sales Trend</h2>
+                <div class="chart-actions">
+                    <button id="downloadChart" class="btn btn-secondary btn-sm">
+                        <span>📷</span> Save Image
+                    </button>
+                    <button id="toggleChartType" class="btn btn-secondary btn-sm">
+                        <span>📊</span> Toggle Type
+                    </button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+            <div id="chartError" class="error-message" style="display: none;">
+                <span class="error-icon">⚠️</span>
+                <span class="error-text"></span>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>Interactive Sales Dashboard v2.0 | Built with Flask, Chart.js & Modern Web APIs</p>
+            <p class="performance-info">
+                <span id="apiResponseTime">API: --ms</span> |
+                <span id="cacheStatus">Cache: --</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- External JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+    <!-- Initialize Dashboard -->
+    <script>
+        // Initialize dashboard when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof DashboardApp !== 'undefined') {
+                DashboardApp.init();
+            } else {
+                console.error('Dashboard application failed to load');
+            }
+        });
+    </script>
+</body>
+</html>
